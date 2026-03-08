@@ -5,6 +5,12 @@
          ensure_layout/0]).
 
 base_dir() ->
+    case os:getenv("HECATE_HOME") of
+        false -> base_dir_from_env();
+        HecateHome -> filename:join(HecateHome, "hecate-app-snake-dueld")
+    end.
+
+base_dir_from_env() ->
     case application:get_env(hecate_app_snake_dueld, data_dir) of
         {ok, Dir} -> expand_path(Dir);
         undefined -> expand_path("~/.hecate/hecate-app-snake-dueld")
