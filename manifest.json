@@ -1,7 +1,7 @@
 {
   "name": "hecate-app-snake-duel",
   "display_name": "Snake Duel",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "icon": "snake",
   "description": "AI vs AI Snake Duel Arena",
   "tag": "snake-duel-studio",

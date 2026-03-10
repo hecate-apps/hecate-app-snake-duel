@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2] - 2026-03-10
+
+### Fixed
+- Fix API paths for in-VM plugin routing (use relative paths, not old standalone paths)
+- Fix SSE streaming to work with in-VM plugin model (route through daemon socket)
+- Pass plugin name to custom element for correct SSE socket routing
+
 ## [0.2.1] - 2026-03-10
 
 ### Fixed
