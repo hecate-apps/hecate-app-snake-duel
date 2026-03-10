@@ -1,10 +1,8 @@
-%%% @doc API handler: GET /api/arcade/snake-duel/history
+%%% @doc API handler: GET /history
 %%% Returns recent match history, most recent first.
 -module(get_match_history_api).
 
--export([init/2, routes/0]).
-
-routes() -> [{"/api/arcade/snake-duel/history", ?MODULE, []}].
+-export([init/2]).
 
 init(Req0, State) ->
     case cowboy_req:method(Req0) of

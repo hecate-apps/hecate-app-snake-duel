@@ -1,10 +1,8 @@
-%%% @doc API handler: GET /api/arcade/snake-duel/matches/:match_id/result
+%%% @doc API handler: GET /matches/:match_id/result
 %%% Returns a completed match result.
 -module(get_match_by_id_api).
 
--export([init/2, routes/0]).
-
-routes() -> [{"/api/arcade/snake-duel/matches/:match_id/result", ?MODULE, []}].
+-export([init/2]).
 
 init(Req0, State) ->
     case cowboy_req:method(Req0) of

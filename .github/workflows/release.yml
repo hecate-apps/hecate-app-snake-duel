@@ -7,13 +7,40 @@ permissions:
   contents: write
 
 jobs:
-  release:
-    name: Create GitHub release
+  package:
+    name: Build plugin package
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
         with:
-          fetch-depth: 0
+          otp-version: "27"
+          rebar3-version: "3.24"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: hecate-app-snake-duelw/package-lock.json
+      - name: Build frontend
+        working-directory: hecate-app-snake-duelw
+        run: npm ci && npm run build:lib
+      - name: Copy frontend assets
+        run: mkdir -p hecate-app-snake-dueld/priv/static && cp -r hecate-app-snake-duelw/dist/* hecate-app-snake-dueld/priv/static/
+      - name: Build daemon
+        working-directory: hecate-app-snake-dueld
+        run: rebar3 get-deps && rebar3 compile
+      - name: Package plugin tar.gz
+        working-directory: hecate-app-snake-dueld
+        run: |
+          mkdir -p _build/plugin/hecate-app-snake-duel/ebin
+          mkdir -p _build/plugin/hecate-app-snake-duel/priv/static
+          cp _build/default/lib/hecate_app_snake_dueld/ebin/*.beam _build/plugin/hecate-app-snake-duel/ebin/
+          for app in run_snake_duel query_snake_duel; do
+            cp _build/default/lib/$app/ebin/*.beam _build/plugin/hecate-app-snake-duel/ebin/
+          done
+          cp -r priv/static/* _build/plugin/hecate-app-snake-duel/priv/static/ 2>/dev/null || true
+          cp ../manifest.json _build/plugin/hecate-app-snake-duel/
+          cd _build/plugin && tar czf hecate-app-snake-duel.tar.gz hecate-app-snake-duel/
       - name: Extract version
         id: version
         run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
@@ -29,3 +56,4 @@ jobs:
         with:
           body: ${{ steps.changelog.outputs.body }}
           generate_release_notes: false
+          files: hecate-app-snake-dueld/_build/plugin/hecate-app-snake-duel.tar.gz

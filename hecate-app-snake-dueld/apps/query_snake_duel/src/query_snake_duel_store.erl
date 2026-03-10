@@ -14,8 +14,8 @@ start_link() ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 init([]) ->
+    ok = app_snake_dueld_paths:ensure_layout(),
     DbPath = app_snake_dueld_paths:sqlite_path("query_snake_duel.db"),
-    ok = filelib:ensure_dir(DbPath),
     {ok, Db} = esqlite3:open(DbPath),
     ok = esqlite3:exec(Db, "PRAGMA journal_mode=WAL;"),
     ok = esqlite3:exec(Db, "PRAGMA synchronous=NORMAL;"),

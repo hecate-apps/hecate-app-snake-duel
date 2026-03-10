@@ -1,4 +1,4 @@
-%%% @doc SSE endpoint: GET /api/arcade/snake-duel/matches/:match_id/stream
+%%% @doc SSE endpoint: GET /matches/:match_id/stream
 %%%
 %%% Long-lived Server-Sent Events connection for streaming live duel
 %%% state to connected clients. Joins the duel's pg group and forwards
@@ -6,11 +6,9 @@
 %%% @end
 -module(stream_duel_api).
 
--export([init/2, routes/0]).
+-export([init/2]).
 
 -define(HEARTBEAT_MS, 15000).
-
-routes() -> [{"/api/arcade/snake-duel/matches/:match_id/stream", ?MODULE, []}].
 
 init(Req0, State) ->
     case cowboy_req:method(Req0) of

@@ -1,20 +1,22 @@
 {application, hecate_app_snake_dueld, [
-    {description, "Hecate Snake Duel - Snake Duel Arena Daemon"},
-    {vsn, "0.1.1"},
+    {description, "Hecate Snake Duel - AI vs AI Snake Arena Plugin"},
+    {vsn, "0.2.0"},
     {registered, [hecate_app_snake_dueld_sup]},
     {mod, {hecate_app_snake_dueld_app, []}},
     {applications, [
         kernel, stdlib, crypto,
         cowboy,
-        run_snake_duel,
-        query_snake_duel
+        esqlite
+
+        %% NOTE: Domain apps (run_snake_duel, query_snake_duel) are NOT listed here.
+        %% In in-VM mode, app_snake_duel:init/1 starts domain supervisors.
+        %% In standalone mode, the release config starts them AFTER this app.
     ]},
     {env, [
         {data_dir, "~/.hecate/hecate-app-snake-dueld"},
-        {api_socket_name, "api.sock"},
         {enabled, true}
     ]},
     {modules, []},
     {licenses, ["Apache-2.0"]},
-    {links, [{"GitHub", "https://github.com/hecate-social/hecate-app-snake-duel"}]}
+    {links, [{"GitHub", "https://github.com/hecate-apps/hecate-app-snake-duel"}]}
 ]}.

@@ -1,13 +1,16 @@
 {
-  "name": "snake-duel",
-  "version": "0.1.2",
+  "name": "hecate-app-snake-duel",
+  "version": "0.2.0",
   "icon": "\ud83d\udc0d",
-  "description": "Snake Duel Arena",
+  "description": "AI vs AI Snake Duel Arena",
   "tag": "snake-duel-studio",
+  "callback_module": "app_snake_duel",
+  "plugin_type": "in_vm",
   "trust_level": "untrusted",
   "permissions": [],
   "repository": "https://github.com/hecate-apps/hecate-app-snake-duel",
   "license": "Apache-2.0",
+  "min_daemon_version": "0.14.0",
   "appstore": {
     "plugin_name": "Snake Duel",
     "org": "hecate-apps",
@@ -17,7 +20,7 @@
     "fee_cents": 0,
     "fee_currency": "EUR",
     "node_limit": 0,
-    "min_daemon_version": "0.14.0",
-    "group_name": "GAMES"
+    "group_name": "GAMES",
+    "group_icon": "gamepad-2"
   }
 }

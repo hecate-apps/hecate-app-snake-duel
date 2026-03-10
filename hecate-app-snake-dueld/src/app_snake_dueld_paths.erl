@@ -1,32 +1,34 @@
 -module(app_snake_dueld_paths).
 
 -export([base_dir/0, sqlite_dir/0, sqlite_path/1, reckon_dir/0, reckon_path/1,
-         socket_dir/0, socket_path/1, run_dir/0, run_path/1,
-         ensure_layout/0]).
+         run_dir/0, run_path/1, ensure_layout/0]).
 
 base_dir() ->
-    case os:getenv("HECATE_HOME") of
-        false -> base_dir_from_env();
-        HecateHome -> filename:join(HecateHome, "hecate-app-snake-dueld")
+    case persistent_term:get(app_snake_duel_config, undefined) of
+        #{data_dir := DataDir} -> DataDir;
+        undefined -> base_dir_fallback()
     end.
 
-base_dir_from_env() ->
-    case application:get_env(hecate_app_snake_dueld, data_dir) of
-        {ok, Dir} -> expand_path(Dir);
-        undefined -> expand_path("~/.hecate/hecate-app-snake-dueld")
+base_dir_fallback() ->
+    case os:getenv("HECATE_HOME") of
+        false ->
+            case application:get_env(hecate_app_snake_dueld, data_dir) of
+                {ok, Dir} -> expand_path(Dir);
+                undefined -> expand_path("~/.hecate/hecate-app-snake-dueld")
+            end;
+        HecateHome ->
+            filename:join(HecateHome, "hecate-app-snake-dueld")
     end.
 
 sqlite_dir()     -> filename:join(base_dir(), "sqlite").
 sqlite_path(N)   -> filename:join(sqlite_dir(), N).
 reckon_dir()     -> filename:join(base_dir(), "reckon-db").
 reckon_path(N)   -> filename:join(reckon_dir(), N).
-socket_dir()     -> filename:join(base_dir(), "sockets").
-socket_path(N)   -> filename:join(socket_dir(), N).
 run_dir()        -> filename:join(base_dir(), "run").
 run_path(N)      -> filename:join(run_dir(), N).
 
 ensure_layout() ->
-    Dirs = [sqlite_dir(), reckon_dir(), socket_dir(), run_dir()],
+    Dirs = [sqlite_dir(), reckon_dir(), run_dir()],
     lists:foreach(fun(Dir) -> ok = filelib:ensure_path(Dir) end, Dirs).
 
 expand_path("~/" ++ Rest) -> filename:join(os:getenv("HOME"), Rest);

@@ -1,11 +1,9 @@
-%%% @doc API handler: GET /api/arcade/snake-duel/leaderboard
+%%% @doc API handler: GET /leaderboard
 %%% Returns aggregate win/loss stats. Since Snake Duel is AI-vs-AI,
 %%% the leaderboard tracks AF configurations by win rate.
 -module(get_leaderboard_api).
 
--export([init/2, routes/0]).
-
-routes() -> [{"/api/arcade/snake-duel/leaderboard", ?MODULE, []}].
+-export([init/2]).
 
 init(Req0, State) ->
     case cowboy_req:method(Req0) of
