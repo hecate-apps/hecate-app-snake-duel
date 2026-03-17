@@ -31,6 +31,11 @@ init(#{plugin_name := PluginName, data_dir := DataDir} = Config) ->
     }),
     case app_snake_duel_sup:start_link() of
         {ok, Pid} ->
+            %% CRITICAL: unlink supervisor from this process.
+            %% Plugin loader calls init/1 from a temporary spawned process.
+            %% OTP supervisors stop themselves when their parent exits.
+            %% Without unlink, the supervisor dies when the init process completes.
+            unlink(Pid),
             logger:info("[app-snake-duel] Supervision tree started (~p)", [Pid]),
             {ok, #{sup_pid => Pid}};
         {error, {already_started, Pid}} ->
@@ -64,7 +69,7 @@ manifest() ->
     #{
         name => <<"hecate-app-snake-duel">>,
         display_name => <<"Snake Duel">>,
-        version => <<"0.3.0">>,
+        version => <<"0.3.1">>,
         description => <<"AI vs AI Snake Duel Arena">>,
         icon => <<"snake">>,
         tag => <<"snake-duel-studio">>,

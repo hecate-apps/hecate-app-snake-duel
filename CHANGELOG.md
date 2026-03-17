@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.1] - 2026-03-17
+
+### Fixed
+- Fix match startup crash: unlink supervisor from plugin loader's temporary init process to prevent supervision tree from dying when init process exits
+
 ## [0.3.0] - 2026-03-17
 
 ### Changed
