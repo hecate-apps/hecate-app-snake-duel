@@ -64,11 +64,11 @@ manifest() ->
     #{
         name => <<"hecate-app-snake-duel">>,
         display_name => <<"Snake Duel">>,
-        version => <<"0.2.0">>,
+        version => <<"0.3.0">>,
         description => <<"AI vs AI Snake Duel Arena">>,
         icon => <<"snake">>,
         tag => <<"snake-duel-studio">>,
-        min_sdk_version => <<"0.1.0">>
+        min_sdk_version => <<"0.6.0">>
     }.
 
 -spec flag_maps() -> #{binary() => evoq_bit_flags:flag_map()}.

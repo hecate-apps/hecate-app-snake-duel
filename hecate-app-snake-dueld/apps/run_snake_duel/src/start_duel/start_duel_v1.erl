@@ -1,7 +1,9 @@
 %%% @doc start_duel_v1 command
 %%% Initiates a new snake duel.
 -module(start_duel_v1).
+-behaviour(evoq_command).
 
+-export([command_type/0]).
 -export([new/1, to_map/1, from_map/1]).
 -export([get_match_id/1, get_af1/1, get_af2/1, get_tick_ms/1]).
 -export([generate_id/0]).
@@ -17,6 +19,9 @@
 -opaque start_duel_v1() :: #start_duel_v1{}.
 
 -dialyzer({nowarn_function, [new/1, from_map/1]}).
+
+-spec command_type() -> start_duel_v1.
+command_type() -> start_duel_v1.
 
 -spec new(map()) -> {ok, start_duel_v1()} | {error, term()}.
 new(Params) ->
@@ -34,7 +39,7 @@ new(Params) ->
 -spec to_map(start_duel_v1()) -> map().
 to_map(#start_duel_v1{} = Cmd) ->
     #{
-        <<"command_type">> => <<"start_duel">>,
+        command_type => start_duel_v1,
         <<"match_id">> => Cmd#start_duel_v1.match_id,
         <<"af1">> => Cmd#start_duel_v1.af1,
         <<"af2">> => Cmd#start_duel_v1.af2,

@@ -1,7 +1,8 @@
 %%% @doc duel_started_v1 event
 %%% Emitted when a snake duel is successfully started.
 -module(duel_started_v1).
-
+-behaviour(evoq_event).
+-export([event_type/0]).
 -export([new/1, to_map/1, from_map/1]).
 -export([get_match_id/1, get_af1/1, get_af2/1, get_tick_ms/1, get_started_at/1]).
 
@@ -18,6 +19,9 @@
 
 -dialyzer({nowarn_function, [new/1, from_map/1]}).
 
+-spec event_type() -> duel_started_v1.
+event_type() -> duel_started_v1.
+
 -spec new(map()) -> duel_started_v1().
 new(#{match_id := MatchId} = Params) ->
     #duel_started_v1{
@@ -31,7 +35,7 @@ new(#{match_id := MatchId} = Params) ->
 -spec to_map(duel_started_v1()) -> map().
 to_map(#duel_started_v1{} = E) ->
     #{
-        <<"event_type">> => <<"duel_started_v1">>,
+        event_type => duel_started_v1,
         <<"match_id">> => E#duel_started_v1.match_id,
         <<"af1">> => E#duel_started_v1.af1,
         <<"af2">> => E#duel_started_v1.af2,

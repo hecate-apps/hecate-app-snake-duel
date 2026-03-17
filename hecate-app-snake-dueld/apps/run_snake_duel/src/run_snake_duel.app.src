@@ -1,6 +1,6 @@
 {application, run_snake_duel, [
     {description, "Snake Duel match lifecycle (CMD)"},
-    {vsn, "0.2.0"},
+    {vsn, "0.3.0"},
     {mod, {run_snake_duel_app, []}},
     {applications, [kernel, stdlib, crypto]},
     {registered, [run_snake_duel_sup, duel_proc_sup]},
