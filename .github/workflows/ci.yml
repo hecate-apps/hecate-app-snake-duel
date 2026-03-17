@@ -2,6 +2,7 @@ name: CI
 on:
   push:
     branches: [main]
+    tags-ignore: ["v*"]
   pull_request:
     branches: [main]
 
@@ -22,11 +23,6 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build:lib
-      - uses: actions/upload-artifact@v4
-        with:
-          name: frontend-dist
-          path: hecate-app-snake-duelw/dist/
-          retention-days: 1
 
   daemon:
     name: Daemon (compile + test)
@@ -51,38 +47,3 @@ jobs:
       - run: rebar3 compile
       - run: rebar3 eunit
       - run: rebar3 dialyzer
-
-  package:
-    name: Package plugin
-    needs: [frontend, daemon]
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: hecate-app-snake-dueld
-    steps:
-      - uses: actions/checkout@v4
-      - uses: erlef/setup-beam@v1
-        with:
-          otp-version: "27"
-          rebar3-version: "3.24"
-      - uses: actions/download-artifact@v4
-        with:
-          name: frontend-dist
-          path: hecate-app-snake-dueld/priv/static/
-      - run: rebar3 get-deps && rebar3 compile
-      - name: Package plugin tar.gz
-        run: |
-          mkdir -p _build/plugin/hecate-app-snake-duel/ebin
-          mkdir -p _build/plugin/hecate-app-snake-duel/priv/static
-          cp _build/default/lib/hecate_app_snake_dueld/ebin/*.beam _build/plugin/hecate-app-snake-duel/ebin/
-          for app in run_snake_duel query_snake_duel; do
-            cp _build/default/lib/$app/ebin/*.beam _build/plugin/hecate-app-snake-duel/ebin/
-          done
-          cp -r priv/static/* _build/plugin/hecate-app-snake-duel/priv/static/ 2>/dev/null || true
-          cp ../manifest.json _build/plugin/hecate-app-snake-duel/
-          cd _build/plugin && tar czf hecate-app-snake-duel.tar.gz hecate-app-snake-duel/
-      - uses: actions/upload-artifact@v4
-        with:
-          name: hecate-app-snake-duel-plugin
-          path: hecate-app-snake-dueld/_build/plugin/hecate-app-snake-duel.tar.gz
-          retention-days: 7
